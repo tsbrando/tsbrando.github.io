@@ -16,7 +16,6 @@ with open(sys.argv[1], 'rb') as r:
 apply_patch(rom_data, 'patches/KR_speed_fix.ips')
 apply_patch(rom_data, 'patches/PR_speed_fix.ips')
 #  apply_patch(rom_data, 'patches/In game playbook changing.ips')
-#  apply_patch(rom_data, 'patches/huddle-break.ips')
 apply_patch(rom_data, 'patches/cpu_passing_ai_hack.ips')
 apply_patch(rom_data, 'patches/3minquarter.ips')
 apply_patch(rom_data, 'patches/touchback_on_kickoffs.ips')

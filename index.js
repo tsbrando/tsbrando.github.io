@@ -2,6 +2,7 @@
 $ = document.querySelector.bind(document);
 $$ = document.querySelectorAll.bind(document);
 ls = localStorage;
+VERSION = "2021.07.10";
 
 String.prototype.basename = function() {
     let index = this.lastIndexOf('/');
@@ -34,9 +35,17 @@ class Rom extends Int8Array {
         this.set(0x2ff0, stats)
     }
 
-    randomPlaybooks() {
+    randomPlaybooks(allowBroken) {
         console.log("Randomizing playbooks");
-        let playbooks = Array.from({length: 28 * 4}, () => randint(0, 255) & 0x77);
+        let playbooks;
+        if (allowBroken) {
+            playbooks = Array.from({length: 28 * 4}, () => randint(0, 255));
+            for (let i=3; i < 28 * 4; i+=4) {
+                playbooks[i] &= 0xf7; // no softlock plays
+            }
+        } else {
+            playbooks = Array.from({length: 28 * 4}, () => randint(0, 255) & 0x77);
+        }
         this.set(0x1d300, playbooks);
     }
 
@@ -152,11 +161,10 @@ function randomize(file) {
 
     file.arrayBuffer().then(buffer => {
         rom = new Rom(buffer);
-        console.log(rom);
         if (ls.returnerSpeed) rom.fixReturnerSpeed();
         if (ls.tbKickoff) rom.touchbackOnKickoff();
         if (ls.randomStats) rom.randomStats();
-        if (ls.randomPlaybook) rom.randomPlaybooks();
+        if (ls.randomPlaybook) rom.randomPlaybooks(ls.brokenPlays);
         if (ls.disablePbEdit) rom.disablePlaybookEdit();
         if (ls.singleTeam) rom.singleTeam();
         if (ls.passingAI) rom.improvePassingAI();
@@ -181,6 +189,10 @@ function restoreSettings() {
     if (ls.randomPlaybook === undefined) 
         ls.randomPlaybook = true;
     $('#random-playbook').checked = ls.randomPlaybook;
+
+    if (ls.brokenPlays === undefined) 
+        ls.brokenPlays = "";
+    $('#random-playbook').checked = ls.brokenPlays;
 
     if (ls.disablePbEdit === undefined)
         ls.disablePbEdit = true;
@@ -213,7 +225,6 @@ function restoreSettings() {
 }
 
 function updateInputFile(input) {
-    console.log(input);
     filename = input.value.basename()
     display = $('#input-file-display')
     if (filename) {
@@ -228,6 +239,7 @@ function updateInputFile(input) {
 
 window.addEventListener('load', event => {
     restoreSettings();
+    $('#version').innerText = VERSION;
     $('#randomize').addEventListener('click', event => {
         randomize($('#inputfile').files[0]);
     });
@@ -238,6 +250,10 @@ window.addEventListener('load', event => {
 
     $('#random-playbook').addEventListener('change', function(event) {
         ls.randomPlaybook = this.checked || '';
+    });
+
+    $('#broken-plays').addEventListener('change', function(event) {
+        ls.brokenPlays = this.checked || '';
     });
 
     $('#disable-pb-edit').addEventListener('change', function(event) {

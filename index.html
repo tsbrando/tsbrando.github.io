@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>Tecmo Super Bowl Randomizer</title>
         <link href="index.css" rel="stylesheet">
         <script src='index.js'></script>
-        <title>Tecmo Super Bowl Randomizer</title>
+        <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+        <meta content="utf-8" http-equiv="encoding">
     </head>
     <body>
         <h1>Tecmo Super Bowl Randomizer</h1>
-        <h6>Version 2021.07.10</h6>
+        <h6>Version <span id='version'></span></h6>
         <div id='rando-options'>
             ROM File: <input id='inputfile' type="file">
             <span id='input-file-display'></span>
@@ -21,6 +23,12 @@
                 <label>
                     <input id='random-playbook' checked type="checkbox">
                     <span>Randomize Playbook</span>
+                </label>
+            </div>
+            <div style="margin-left: 1em;">
+                <label>
+                    <input id='broken-plays' checked type="checkbox">
+                    <span>Allow &quot;Broken&quot; Plays</span>
                 </label>
             </div>
             <div>

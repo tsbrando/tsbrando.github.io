@@ -36,7 +36,7 @@ class Rom extends Int8Array {
 
     randomPlaybooks() {
         console.log("Randomizing playbooks");
-        let playbooks = Array.from({length: 27 * 4}, () => randint(0, 255) & 0x77);
+        let playbooks = Array.from({length: 28 * 4}, () => randint(0, 255) & 0x77);
         this.set(0x1d300, playbooks);
     }
 

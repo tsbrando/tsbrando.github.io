@@ -1,4 +1,4 @@
-VERSION = "2021.07.10.2";
+VERSION = "2021.07.10.3";
 
 $ = document.querySelector.bind(document);
 $$ = document.querySelectorAll.bind(document);
@@ -63,6 +63,10 @@ class Rom extends Int8Array {
         rom.set(0x2107d, [0x60]);
     }
 
+    randomMusicLoop() {
+        this.set(0x255dc, [0xea,  0xa5,  0x3c,  0x29,  0x07,  0xea]);
+    }
+
     singleTeam() {
         console.log("Setting a single team to control");
         let team = 0x9b + randint(0, 27)
@@ -81,6 +85,12 @@ class Rom extends Int8Array {
     }
     setQuarterLength(length) {
         this.set(0x2223b, [length]);
+    }
+
+    splitQbCtrlAcc() {
+        console.log("Splitting QB control/accuracy")
+        this.set(0x29e44, [0x20,  0xf7,  0x9f]);
+        this.set(0x29ff7, [0xa0,  0x88,  0x4c,  0xdd,  0x9f]);
     }
 
     improvePassingAI() {
@@ -176,7 +186,9 @@ function randomize(file) {
         if (ls.randomStats) rom.randomStats();
         if (ls.randomPlaybook) rom.randomPlaybooks(ls.brokenPlays);
         if (ls.disablePbEdit) rom.disablePlaybookEdit();
+        if (ls.randomMusic) rom.randomMusicLoop();
         if (ls.singleTeam) rom.singleTeam();
+        if (ls.splitQbCtrl) rom.splitQbCtrlAcc();
         if (ls.passingAI) rom.improvePassingAI();
         if (ls.noClockOnKickoff) rom.noClockOnKickoff();
         if (ls.noClockOnPunt) rom.noClockOnPunt();
@@ -208,9 +220,17 @@ function restoreSettings() {
         ls.disablePbEdit = true;
     $('#disable-pb-edit').checked = ls.disablePbEdit;
 
+    if (ls.randomMusic === undefined)
+        ls.randomMusic = true;
+    $('#random-music').checked = ls.randomMusic;
+
     if (ls.singleTeam === undefined)
         ls.singleTeam = true;
     $('#single-team').checked = ls.singleTeam;
+
+    if (ls.splitQbCtrl === undefined)
+        ls.splitQbCtrl = true;
+    $('#split-qb-ctrl').checked = ls.splitQbCtrl;
 
     if (ls.passingAI === undefined)
         ls.passingAI = true;
@@ -270,8 +290,16 @@ window.addEventListener('load', event => {
         ls.disablePbEdit = this.checked || '';
     });
 
+    $('#random-music').addEventListener('change', function(event) {
+        ls.randomMusic = this.checked || '';
+    });
+
     $('#single-team').addEventListener('change', function(event) {
         ls.singleTeam = this.checked || '';
+    });
+
+    $('#split-qb-ctrl').addEventListener('change', function(event) {
+        ls.splitQbCtrl = this.checked || '';
     });
 
     $('#passing-ai').addEventListener('change', function(event) {

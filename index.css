@@ -9,6 +9,7 @@ body {
     font-weight: bold;
     background-color: #155fd9;
     color: white;
+    font-size: 16px;
 }
 
 a {
@@ -77,3 +78,22 @@ input[type="checkbox"]:not(:checked) + span {
     color: #f22;
 }
 
+/* mobile devices */
+@media (max-device-width: 480px) {
+
+    body {
+        font-size: 12px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+    div#rando-options {
+        width: calc(90% - 1em);
+        padding: 1em 1em;
+    }
+    h6 {
+        width: calc(90% - 1em);
+    }
+
+}

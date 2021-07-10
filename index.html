@@ -6,6 +6,7 @@
         <script src='index.js'></script>
         <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
         <meta content="utf-8" http-equiv="encoding">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
     </head>
     <body>
         <h1>Tecmo Super Bowl Randomizer</h1>
@@ -28,7 +29,13 @@
             <div style="margin-left: 1em;">
                 <label>
                     <input id='broken-plays' checked type="checkbox">
-                    <span>Allow &quot;Broken&quot; Plays</span>
+                    <span>Allow Plays in Wrong Slot</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input id='random-music' checked type="checkbox">
+                    <span>Randomize Music per Play</span>
                 </label>
             </div>
             <div>
@@ -40,13 +47,19 @@
             <div>
                 <label title="Only allow one randomly chosen team to be used">
                     <input id='single-team' checked type="checkbox">
-                    <span>Restrict Team Choice in Season Mode</span>
+                    <span>Restrict Team Choice in Season</span>
                 </label>
             </div>
             <div>
                 <label>
                     <input id='returner-speed' checked type="checkbox">
                     <span>Fix Returner Speed Bug</span>
+                </label>
+            </div>
+            <div title="Normally Pass Accuracy goes unused">
+                <label>
+                    <input id='split-qb-ctrl' checked type="checkbox">
+                    <span>Split Pass Control &amp; Accuracy</span>
                 </label>
             </div>
             <div>
@@ -58,7 +71,7 @@
             <div>
                 <label>
                     <input id='tb-kickoff' checked type="checkbox">
-                    <span>Touchback Not Safety on Kickoffs</span>
+                    <span>No Safety on Kickoffs</span>
                 </label>
             </div>
             <div>

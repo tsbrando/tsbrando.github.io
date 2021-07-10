@@ -2,7 +2,7 @@
 $ = document.querySelector.bind(document);
 $$ = document.querySelectorAll.bind(document);
 ls = localStorage;
-VERSION = "2021.07.10";
+VERSION = "2021.07.10.1";
 
 String.prototype.basename = function() {
     let index = this.lastIndexOf('/');
@@ -23,6 +23,15 @@ class Rom extends Int8Array {
         }
     }
 
+    addVersionString() {
+        this.set(0xc4f3, Array.from(" TSB RANDO ", c => c.charCodeAt(0)));
+        let version = "VERSION " + VERSION;
+        version = version.padStart(
+            Math.floor((24 - version.length) / 2) + version.length);
+        version = version.padEnd(24);
+        this.set(0xc4d9, Array.from(version, c => c.charCodeAt(0)));
+    }
+
     fixReturnerSpeed() {
         console.log("Fixing returner speed");
         this.set(0x080f3, [0xf3,  0x03,  0xef,  0xe4,  0xdf,  0xfe,  0xff]);
@@ -40,7 +49,7 @@ class Rom extends Int8Array {
         let playbooks;
         if (allowBroken) {
             playbooks = Array.from({length: 28 * 4}, () => randint(0, 255));
-            for (let i=3; i < 28 * 4; i+=4) {
+            for (let i=1; i < 28 * 4; i+=2) {
                 playbooks[i] &= 0xf7; // no softlock plays
             }
         } else {
@@ -161,6 +170,7 @@ function randomize(file) {
 
     file.arrayBuffer().then(buffer => {
         rom = new Rom(buffer);
+        rom.addVersionString();
         if (ls.returnerSpeed) rom.fixReturnerSpeed();
         if (ls.tbKickoff) rom.touchbackOnKickoff();
         if (ls.randomStats) rom.randomStats();

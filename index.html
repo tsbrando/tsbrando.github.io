@@ -7,6 +7,7 @@
     </head>
     <body>
         <h1>Tecmo Super Bowl Randomizer</h1>
+        <h6>Version 2021.07.09</h6>
         <div id='rando-options'>
             ROM File: <input id='inputfile' type="file">
             <span id='input-file-display'></span>
@@ -31,7 +32,7 @@
             <div>
                 <label title="Only allow one randomly chosen team to be used">
                     <input id='single-team' checked type="checkbox">
-                    <span>Restrict Team in Season Mode</span>
+                    <span>Restrict Team Choice in Season Mode</span>
                 </label>
             </div>
             <div>
@@ -39,55 +40,64 @@
                     <input id='returner-speed' checked type="checkbox">
                     <span>Fix Returner Speed Bug</span>
                 </label>
-            <div>
+            </div>
             <div>
                 <label>
                     <input id='passing-ai' checked type="checkbox">
                     <span>Improved CPU passing AI</span>
                 </label>
-            <div>
+            </div>
             <div>
                 <label>
                     <input id='tb-kickoff' checked type="checkbox">
                     <span>Touchback Not Safety on Kickoffs</span>
                 </label>
-            <div>
+            </div>
             <div>
                 <label>
                     <input id='no-clock-on-kickoff' checked type="checkbox">
                     <span>Stop Clock During Kickoffs</span>
                 </label>
-            <div>
+            </div>
             <div>
                 <label>
                     <input id='no-clock-on-punt' type="checkbox">
                     <span>Stop Clock During Punts</span>
                 </label>
-            <div>
-                Quarter Length: 
-                <select id='quarter-length'>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option selected value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                    <option value="13">13</option>
-                    <option value="14">14</option>
-                    <option value="15">15</option>
-                </select>
-                <span id='quarter-length-display'>3</span>
-                Minutes
             </div>
+            Quarter Length: 
+            <select id='quarter-length'>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option selected value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+            </select>
+            <span id='quarter-length-display'>3</span>
+            Minutes
             <div id='randomize-div'>
                 <button id='randomize'>Hut!</button>
             </div>
         </div>
+        </div>
+        <h6>
+            <a href="https://github.com/tsbrando/tsbrando">Github</a>
+        </h6>
+        <br><br>
+        <h6>
+            Note: There is currently a bug when &quot;Rectrict Team Choice&quot; is
+            on that requires you to reset the game once in order to control the
+            chosen team.
+        </h6>
     </body>
 </html>

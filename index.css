@@ -11,10 +11,21 @@ body {
     color: white;
 }
 
+a {
+    color: white;
+}
+
 h1 {
     line-height: 1.1em;
     font-size: 3em;
     text-align: center;
+}
+
+h6 {
+    font-size: 0.6em;
+    max-width: 600px;
+    text-align: center;
+    margin: auto;
 }
 
 #randomize-div {

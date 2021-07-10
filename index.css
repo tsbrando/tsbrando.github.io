@@ -1,0 +1,68 @@
+@font-face {
+    font-family: "tecmo headline";
+    src: url('fonts/tecmo-bowl-headline.otf') format('opentype');
+}
+
+body {
+    font-family: "tecmo headline", sans-serif;
+    line-height: 1.5em;
+    font-weight: bold;
+    background-color: #155fd9;
+    color: white;
+}
+
+h1 {
+    line-height: 1.1em;
+    font-size: 3em;
+    text-align: center;
+}
+
+#randomize-div {
+    margin-top: 2em;
+    text-align: right;
+}
+
+div#rando-options {
+    border: 4px solid white;
+    border-radius: 10px;
+    padding: 1em 4em;
+    max-width: 600px;
+    margin: auto;
+}
+
+button { 
+    background-color: #155fd9;
+    color: white;
+    border: 3px solid white;
+    border-radius: 6px;
+    padding: 0.3em;
+}
+
+button, input {
+    font-family: "tecmo headline", sans-serif;
+}
+
+#quarter-length {
+    opacity: 0;
+    position: absolute;
+}
+
+#inputfile {
+    opacity: 0;
+    position:absolute;
+}
+
+#quarter-length-display {
+     display: inline-block;
+     min-width: 2em;
+     text-align: center;
+}
+
+input[type="file"][value=""] + span {
+    color: red;
+}
+
+input[type="checkbox"]:not(:checked) + span {
+    color: #f22;
+}
+

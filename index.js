@@ -1,8 +1,8 @@
+VERSION = "2021.07.10.2";
 
 $ = document.querySelector.bind(document);
 $$ = document.querySelectorAll.bind(document);
 ls = localStorage;
-VERSION = "2021.07.10.1";
 
 String.prototype.basename = function() {
     let index = this.lastIndexOf('/');
@@ -202,7 +202,7 @@ function restoreSettings() {
 
     if (ls.brokenPlays === undefined) 
         ls.brokenPlays = "";
-    $('#random-playbook').checked = ls.brokenPlays;
+    $('#broken-plays').checked = ls.brokenPlays;
 
     if (ls.disablePbEdit === undefined)
         ls.disablePbEdit = true;

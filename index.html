@@ -4,6 +4,7 @@
         <title>Tecmo Super Bowl Randomizer</title>
         <link href="index.css" rel="stylesheet">
         <script src='index.js'></script>
+        <script src='parse.js'></script>
         <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
         <meta content="utf-8" http-equiv="encoding">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -42,6 +43,12 @@
                 <label>
                     <input id='disable-pb-edit' checked type="checkbox">
                     <span>Disable Playbook Editing</span>
+                </label>
+            </div>
+            <div>
+                <label>
+                    <input id='no-starter-reset' checked type="checkbox">
+                    <span>Don&rsquo;t Reset Starters on Injury Return</span>
                 </label>
             </div>
             <div>
@@ -116,7 +123,7 @@
         </h6>
         <br><br>
         <h6>
-            Note: There is currently a bug when &quot;Rectrict Team Choice&quot; is
+            Note: There is currently a bug when &quot;Restrict Team Choice&quot; is
             on that requires you to reset the game once in order to control the
             chosen team.
         </h6>

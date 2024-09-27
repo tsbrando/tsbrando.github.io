@@ -1,8 +1,11 @@
-VERSION = "2021.07.10.3";
+VERSION = "2024.08.29";
 
 $ = document.querySelector.bind(document);
 $$ = document.querySelectorAll.bind(document);
 ls = localStorage;
+
+// separate player names
+// /([a-z. ]*)([A-Z ]*)/.exec(name)
 
 String.prototype.basename = function() {
     let index = this.lastIndexOf('/');
@@ -11,7 +14,7 @@ String.prototype.basename = function() {
     return this.substring(index + 1);
 }
 
-class Rom extends Int8Array {
+class Rom extends Uint8Array {
     header() {
         return this.slice(0, 16);
     }
@@ -30,6 +33,11 @@ class Rom extends Int8Array {
             Math.floor((24 - version.length) / 2) + version.length);
         version = version.padEnd(24);
         this.set(0xc4d9, Array.from(version, c => c.charCodeAt(0)));
+    }
+
+    noStarterReset() { // starting rosters do not reset when a player returns
+        console.log("Disabling starter reset");
+        this.set(0x22475, [0xea, 0xea, 0xea]);
     }
 
     fixReturnerSpeed() {
@@ -166,35 +174,34 @@ class Rom extends Int8Array {
         downloader.download = 'TSBRando.' + String(Date.now()) + '.nes';
         downloader.dispatchEvent(new MouseEvent('click'));
     }
+
+    randomize() {
+        if (!this.length) {
+            alert("Please choose a ROM file!");
+            return
+        }
+
+        this.addVersionString();
+        if (ls.returnerSpeed) this.fixReturnerSpeed();
+        if (ls.tbKickoff) this.touchbackOnKickoff();
+        if (ls.randomStats) this.randomStats();
+        if (ls.randomPlaybook) this.randomPlaybooks(ls.brokenPlays);
+        if (ls.disablePbEdit) this.disablePlaybookEdit();
+        if (ls.noStarterReset) this.noStarterReset();
+        if (ls.randomMusic) this.randomMusicLoop();
+        if (ls.singleTeam) this.singleTeam();
+        if (ls.splitQbCtrl) this.splitQbCtrlAcc();
+        if (ls.passingAI) this.improvePassingAI();
+        if (ls.noClockOnKickoff) this.noClockOnKickoff();
+        if (ls.noClockOnPunt) this.noClockOnPunt();
+        this.setQuarterLength(Number(ls.quarterLength))
+        this.save();
+    }
+
 }
 
 function randint(min, max) {
   return min + Math.floor(Math.random() * (max - min + 1));
-}
-
-function randomize(file) {
-    if (!file) {
-        alert("Please choose a ROM file!");
-        return
-    }
-
-    file.arrayBuffer().then(buffer => {
-        rom = new Rom(buffer);
-        rom.addVersionString();
-        if (ls.returnerSpeed) rom.fixReturnerSpeed();
-        if (ls.tbKickoff) rom.touchbackOnKickoff();
-        if (ls.randomStats) rom.randomStats();
-        if (ls.randomPlaybook) rom.randomPlaybooks(ls.brokenPlays);
-        if (ls.disablePbEdit) rom.disablePlaybookEdit();
-        if (ls.randomMusic) rom.randomMusicLoop();
-        if (ls.singleTeam) rom.singleTeam();
-        if (ls.splitQbCtrl) rom.splitQbCtrlAcc();
-        if (ls.passingAI) rom.improvePassingAI();
-        if (ls.noClockOnKickoff) rom.noClockOnKickoff();
-        if (ls.noClockOnPunt) rom.noClockOnPunt();
-        rom.setQuarterLength(Number(ls.quarterLength))
-        rom.save();
-    });
 }
 
 function restoreSettings() {
@@ -219,6 +226,10 @@ function restoreSettings() {
     if (ls.disablePbEdit === undefined)
         ls.disablePbEdit = true;
     $('#disable-pb-edit').checked = ls.disablePbEdit;
+
+    if (ls.noStarterReset === undefined)
+        ls.noStarterReset = "";
+    $('#no-starter-reset').checked = ls.noStarterReset;
 
     if (ls.randomMusic === undefined)
         ls.randomMusic = true;
@@ -260,9 +271,15 @@ function updateInputFile(input) {
     if (filename) {
         display.innerText = input.value.basename();
         display.style.color = 'white';
+        input.files[0].arrayBuffer().then(buffer => {
+            rom = new Rom(buffer);
+            rom.name = ls.romName = filename;
+            ls.romData = rom;
+            init_teams();
+        });
     } else {
         display.innerText = 'No file selected';
-        display.style.color = 'red';
+        display.style.color = '#aaa';
     }
 
 }
@@ -271,7 +288,7 @@ window.addEventListener('load', event => {
     restoreSettings();
     $('#version').innerText = VERSION;
     $('#randomize').addEventListener('click', event => {
-        randomize($('#inputfile').files[0]);
+        rom.randomize($('#inputfile').files[0]);
     });
 
     $('#random-stats').addEventListener('change', function(event) {
@@ -288,6 +305,10 @@ window.addEventListener('load', event => {
 
     $('#disable-pb-edit').addEventListener('change', function(event) {
         ls.disablePbEdit = this.checked || '';
+    });
+
+    $('#no-starter-reset').addEventListener('change', function(event) {
+        ls.noStarterReset = this.checked || '';
     });
 
     $('#random-music').addEventListener('change', function(event) {
@@ -332,4 +353,16 @@ window.addEventListener('load', event => {
     $('#inputfile').addEventListener('change', function(event) {
         updateInputFile(this);
     });
+
+    if (ls.romData) {
+        rom = new Rom(ls.romData.split(','));
+        if (ls.romName) {
+            rom.name = ls.romName
+            let display = $('#input-file-display');
+            display.innerText = ls.romName;
+            display.style.color = 'white';
+        }
+    } else {
+        rom = new Rom();
+    }
 });

@@ -1,4 +1,4 @@
-VERSION = "2024.08.29";
+VERSION = "2024.09.26";
 
 $ = document.querySelector.bind(document);
 $$ = document.querySelectorAll.bind(document);
@@ -50,6 +50,8 @@ class Rom extends Uint8Array {
         console.log("Randomizing Stats");
         let stats = Array.from({length: 0xccc}, () => randint(0, 255));
         this.set(0x2ff0, stats)
+        let runPassRatio = Array.from({length: 28}, () => randint(0, 3)); 
+        this.set(0x27516, runPassRatio)
     }
 
     randomPlaybooks(allowBroken) {
